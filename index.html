@@ -1,0 +1,2036 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Feira de Ciências 2026 sobre Matemática, Inteligência Artificial e Programação, com simuladores, quiz, glossário e roteiro de apresentação.">
+<title>Feira de Ciências | Matemática, IA e Programação</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+:root {
+    --bg: #040613;
+    --panel: rgba(10, 15, 41, 0.72);
+    --panel-soft: rgba(12, 20, 52, 0.54);
+    --line: rgba(0, 247, 255, 0.18);
+    --cyan: #00f7ff;
+    --blue: #4facfe;
+    --green: #42f59e;
+    --amber: #ffd166;
+    --rose: #ff5ea8;
+    --text: #ffffff;
+    --muted: #aeb9dd;
+    --shadow: 0 18px 48px rgba(0, 0, 0, 0.34);
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #02040f;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, var(--cyan), var(--blue));
+    border-radius: 10px;
+}
+
+::selection {
+    background: rgba(0, 247, 255, 0.28);
+    color: #ffffff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Poppins", sans-serif;
+    overflow-x: hidden;
+    line-height: 1.7;
+}
+
+body.light-mode {
+    --bg: #f5f7ff;
+    --panel: rgba(255, 255, 255, 0.84);
+    --panel-soft: rgba(235, 241, 255, 0.82);
+    --line: rgba(0, 87, 150, 0.2);
+    --text: #0b1024;
+    --muted: #42506f;
+    --shadow: 0 18px 42px rgba(20, 42, 80, 0.16);
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+a {
+    color: inherit;
+}
+
+.bg-animation {
+    position: fixed;
+    inset: 0;
+    z-index: -10;
+    overflow: hidden;
+    background:
+        linear-gradient(rgba(0, 247, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 247, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(135deg, rgba(255, 94, 168, 0.06), transparent 38%),
+        linear-gradient(315deg, rgba(66, 245, 158, 0.05), transparent 42%);
+    background-size: 42px 42px, 42px 42px, 100% 100%, 100% 100%;
+}
+
+.scanline {
+    position: fixed;
+    inset: 0;
+    z-index: -9;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.03),
+        rgba(255, 255, 255, 0.03) 1px,
+        transparent 1px,
+        transparent 8px
+    );
+    opacity: 0.26;
+}
+
+.cube {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(0, 247, 255, 0.18);
+    animation: float 15s linear infinite;
+}
+
+.cube:nth-child(1) { top: 10%; left: 20%; }
+.cube:nth-child(2) { top: 70%; left: 80%; animation-delay: 2s; border-color: rgba(66, 245, 158, 0.2); }
+.cube:nth-child(3) { top: 50%; left: 10%; animation-delay: 4s; border-color: rgba(255, 209, 102, 0.22); }
+.cube:nth-child(4) { top: 80%; left: 30%; animation-delay: 6s; border-color: rgba(255, 94, 168, 0.18); }
+.cube:nth-child(5) { top: 20%; left: 70%; animation-delay: 8s; }
+
+@keyframes float {
+    0% { transform: scale(0) rotate(0deg); opacity: 0.75; }
+    100% { transform: scale(6) rotate(720deg); opacity: 0; }
+}
+
+.top-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0%;
+    z-index: 2000;
+    background: linear-gradient(90deg, var(--cyan), var(--green), var(--amber), var(--rose));
+    box-shadow: 0 0 12px rgba(0, 247, 255, 0.65);
+}
+
+nav {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 18px 20px;
+    flex-wrap: wrap;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    background: rgba(4, 6, 19, 0.74);
+    border-bottom: 1px solid var(--line);
+}
+
+body.light-mode nav {
+    background: rgba(245, 247, 255, 0.78);
+}
+
+nav a,
+.nav-tool {
+    color: rgba(255, 255, 255, 0.82);
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+    position: relative;
+    font-size: 0.82rem;
+    font-family: "Orbitron", sans-serif;
+    letter-spacing: 0;
+    border: 0;
+    background: transparent;
+}
+
+body.light-mode nav a,
+body.light-mode .nav-tool {
+    color: rgba(12, 20, 42, 0.82);
+}
+
+nav a:hover,
+nav a.active,
+.nav-tool:hover {
+    color: var(--cyan);
+    text-shadow: 0 0 10px rgba(0, 247, 255, 0.5);
+}
+
+nav a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 0%;
+    height: 2px;
+    background: var(--cyan);
+    transition: 0.3s;
+    box-shadow: 0 0 8px var(--cyan);
+}
+
+nav a:hover::after,
+nav a.active::after {
+    width: 100%;
+}
+
+.nav-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.icon-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text);
+    display: inline-grid;
+    place-items: center;
+    transition: 0.25s;
+}
+
+.icon-btn:hover,
+.icon-btn:focus-visible {
+    border-color: var(--cyan);
+    color: var(--cyan);
+    transform: translateY(-2px);
+    outline: none;
+}
+
+.hero {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 140px 20px 70px;
+    position: relative;
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    bottom: 28px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 247, 255, 0.45), transparent);
+}
+
+.hero-tag {
+    font-family: "Orbitron", sans-serif;
+    color: var(--cyan);
+    font-size: 0.82rem;
+    letter-spacing: 3px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(0, 247, 255, 0.3);
+    padding: 5px 12px;
+    border-radius: 8px;
+    background: rgba(0, 247, 255, 0.06);
+}
+
+.hero h1 {
+    font-family: "Orbitron", sans-serif;
+    font-size: clamp(2.35rem, 8vw, 5.2rem);
+    line-height: 1.08;
+    background: linear-gradient(to right, var(--cyan), var(--blue), var(--green), var(--cyan));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+.hero h2 {
+    margin-top: 20px;
+    font-size: clamp(1rem, 3vw, 1.5rem);
+    color: #b6c6ff;
+    font-weight: 400;
+    font-family: "Orbitron", sans-serif;
+    letter-spacing: 0;
+}
+
+body.light-mode .hero h2 {
+    color: #24466f;
+}
+
+.hero p {
+    max-width: 820px;
+    margin-top: 25px;
+    color: var(--muted);
+    font-size: 1.08rem;
+    font-weight: 300;
+}
+
+.hero-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 38px;
+}
+
+.hero-btn,
+.ghost-btn,
+.mini-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 46px;
+    padding: 14px 22px;
+    border: 1px solid rgba(0, 247, 255, 0.35);
+    border-radius: 8px;
+    background: linear-gradient(45deg, rgba(0, 247, 255, 0.16), rgba(0, 119, 255, 0.15));
+    color: var(--text);
+    font-size: 0.88rem;
+    font-family: "Orbitron", sans-serif;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-decoration: none;
+    transition: 0.3s;
+    box-shadow: 0 0 20px rgba(0, 247, 255, 0.12);
+}
+
+.hero-btn:hover,
+.mini-btn:hover {
+    transform: translateY(-3px);
+    background: linear-gradient(45deg, var(--cyan), var(--blue));
+    box-shadow: 0 0 30px rgba(0, 247, 255, 0.35);
+    color: #00111c;
+}
+
+.ghost-btn {
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.ghost-btn:hover {
+    border-color: var(--green);
+    color: var(--green);
+    transform: translateY(-3px);
+}
+
+.hero-stats {
+    width: min(960px, 94vw);
+    margin-top: 42px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.stat {
+    border: 1px solid var(--line);
+    background: var(--panel-soft);
+    border-radius: 8px;
+    padding: 16px 14px;
+    box-shadow: var(--shadow);
+}
+
+.stat strong {
+    display: block;
+    color: var(--cyan);
+    font-family: "Orbitron", sans-serif;
+    font-size: 1.45rem;
+    line-height: 1.1;
+}
+
+.stat span {
+    color: var(--muted);
+    font-size: 0.82rem;
+}
+
+section {
+    padding: 96px 10%;
+}
+
+.section-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin-bottom: 18px;
+    text-align: center;
+    font-family: "Orbitron", sans-serif;
+    color: var(--cyan);
+    letter-spacing: 0;
+    font-weight: 700;
+}
+
+.section-lead {
+    max-width: 900px;
+    margin: 0 auto 50px;
+    color: var(--muted);
+    text-align: center;
+    font-weight: 300;
+}
+
+.source-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: auto;
+    font-size: 0.78rem;
+    color: rgba(0, 247, 255, 0.72);
+    text-decoration: none;
+    font-family: "Orbitron", sans-serif;
+    letter-spacing: 0;
+    transition: 0.3s;
+    padding-top: 15px;
+}
+
+.source-link:hover {
+    color: #ffffff;
+    text-shadow: 0 0 8px var(--cyan);
+}
+
+body.light-mode .source-link:hover {
+    color: #00324a;
+}
+
+.inline-source {
+    font-size: 0.8rem;
+    margin-left: 6px;
+    color: var(--blue);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.inline-source:hover {
+    color: var(--cyan);
+}
+
+.fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: cubic-bezier(0.2, 0.8, 0.2, 1) 1s;
+}
+
+.fade-in.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 24px;
+}
+
+.card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 30px;
+    transition: 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    min-height: 255px;
+    box-shadow: var(--shadow);
+}
+
+.card::before {
+    content: "// TECH_DATA";
+    position: absolute;
+    top: 15px;
+    right: 18px;
+    font-size: 0.62rem;
+    font-family: "Orbitron", sans-serif;
+    color: rgba(255, 255, 255, 0.2);
+    letter-spacing: 0;
+}
+
+body.light-mode .card::before {
+    color: rgba(0, 20, 50, 0.22);
+}
+
+.card:hover {
+    transform: translateY(-7px);
+    border-color: rgba(0, 247, 255, 0.5);
+    box-shadow: 0 16px 36px rgba(0, 247, 255, 0.14);
+}
+
+.card h3 {
+    color: var(--cyan);
+    margin-bottom: 14px;
+    font-size: 1.22rem;
+    font-family: "Orbitron", sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-right: 58px;
+    letter-spacing: 0;
+}
+
+.card h3 i {
+    color: var(--blue);
+}
+
+.card p {
+    color: var(--muted);
+    font-size: 0.95rem;
+    font-weight: 300;
+    flex-grow: 1;
+}
+
+.career-card::before {
+    content: attr(data-step);
+    font-size: 0.9rem;
+    color: rgba(0, 247, 255, 0.28);
+    font-weight: 800;
+}
+
+.timeline {
+    position: relative;
+    margin-top: 50px;
+}
+
+.timeline::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--cyan), var(--green), var(--amber), transparent);
+    transform: translateX(-50%);
+}
+
+.timeline-item {
+    width: 50%;
+    padding: 24px 40px;
+    position: relative;
+}
+
+.timeline-item:nth-child(odd) {
+    left: 0;
+    text-align: right;
+}
+
+.timeline-item:nth-child(even) {
+    left: 50%;
+}
+
+.timeline-item::after {
+    content: "";
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: var(--cyan);
+    border: 3px solid var(--bg);
+    border-radius: 50%;
+    top: 38px;
+    z-index: 5;
+    box-shadow: 0 0 10px var(--cyan);
+}
+
+.timeline-item:nth-child(odd)::after { right: -6px; }
+.timeline-item:nth-child(even)::after { left: -6px; }
+
+.timeline-content {
+    background: var(--panel);
+    padding: 25px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    backdrop-filter: blur(10px);
+    transition: 0.3s;
+    box-shadow: var(--shadow);
+}
+
+.timeline-content:hover {
+    border-color: var(--cyan);
+    box-shadow: 0 0 20px rgba(0, 247, 255, 0.1);
+}
+
+.timeline-content h3 {
+    color: var(--cyan);
+    margin-bottom: 10px;
+    font-family: "Orbitron", sans-serif;
+    font-size: 1.35rem;
+}
+
+.timeline-content p {
+    color: var(--muted);
+    font-weight: 300;
+}
+
+.lab-grid {
+    display: grid;
+    grid-template-columns: minmax(320px, 1.1fr) minmax(300px, 0.9fr);
+    gap: 24px;
+    align-items: stretch;
+}
+
+.lab-panel,
+.quiz-panel,
+.tool-panel,
+.script-panel,
+.bibliografia {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 28px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(10px);
+}
+
+.panel-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--cyan);
+    font-family: "Orbitron", sans-serif;
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+    letter-spacing: 0;
+}
+
+.panel-copy {
+    color: var(--muted);
+    font-weight: 300;
+    margin-bottom: 18px;
+}
+
+.nn-wrap {
+    min-height: 330px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    background: rgba(2, 4, 15, 0.42);
+    overflow: hidden;
+}
+
+body.light-mode .nn-wrap {
+    background: rgba(230, 238, 255, 0.6);
+}
+
+#networkCanvas,
+#gradientCanvas {
+    width: 100%;
+    height: 330px;
+    display: block;
+}
+
+.controls {
+    display: grid;
+    gap: 15px;
+}
+
+.control label,
+.field label {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.control strong {
+    color: var(--cyan);
+    font-family: "Orbitron", sans-serif;
+    font-size: 0.84rem;
+}
+
+input[type="range"] {
+    width: 100%;
+    accent-color: var(--cyan);
+}
+
+.result-box {
+    margin-top: 18px;
+    padding: 18px;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 247, 255, 0.18);
+    background: rgba(0, 247, 255, 0.055);
+}
+
+.result-box strong {
+    display: block;
+    font-family: "Orbitron", sans-serif;
+    color: var(--green);
+    font-size: 1.45rem;
+    margin-bottom: 4px;
+}
+
+.metric-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.metric {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.metric span {
+    display: block;
+    color: var(--muted);
+    font-size: 0.75rem;
+}
+
+.metric b {
+    color: var(--text);
+    font-family: "Orbitron", sans-serif;
+    font-size: 0.92rem;
+}
+
+.tool-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+.field {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.field input,
+.field textarea,
+.field select,
+.glossary-search {
+    width: 100%;
+    border: 1px solid rgba(0, 247, 255, 0.2);
+    border-radius: 8px;
+    background: rgba(2, 4, 15, 0.5);
+    color: var(--text);
+    padding: 12px 14px;
+    outline: none;
+    resize: vertical;
+}
+
+body.light-mode .field input,
+body.light-mode .field textarea,
+body.light-mode .field select,
+body.light-mode .glossary-search {
+    background: rgba(255, 255, 255, 0.72);
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus,
+.glossary-search:focus {
+    border-color: var(--cyan);
+    box-shadow: 0 0 0 3px rgba(0, 247, 255, 0.12);
+}
+
+.mono-output {
+    min-height: 92px;
+    overflow-wrap: anywhere;
+    font-family: Consolas, "Courier New", monospace;
+    color: var(--green);
+    background: rgba(0, 0, 0, 0.22);
+    border: 1px solid rgba(66, 245, 158, 0.18);
+    border-radius: 8px;
+    padding: 14px;
+}
+
+body.light-mode .mono-output {
+    background: rgba(235, 242, 255, 0.86);
+    color: #087546;
+}
+
+.fact-box {
+    margin-top: 50px;
+    background: linear-gradient(135deg, rgba(6, 17, 46, 0.72), rgba(17, 26, 61, 0.66));
+    padding: 34px;
+    border: 1px solid rgba(0, 247, 255, 0.2);
+    border-left: 5px solid var(--cyan);
+    border-radius: 8px;
+    font-size: 1.02rem;
+    color: #cbd5e1;
+    font-weight: 300;
+    box-shadow: var(--shadow);
+}
+
+body.light-mode .fact-box {
+    color: #34415f;
+    background: rgba(255, 255, 255, 0.78);
+}
+
+.fact-box p {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.tabs {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+}
+
+.tab-btn {
+    min-height: 42px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--muted);
+    font-weight: 700;
+}
+
+.tab-btn.active {
+    color: #00111c;
+    background: var(--cyan);
+    border-color: var(--cyan);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.quiz-option {
+    width: 100%;
+    margin-top: 10px;
+    min-height: 48px;
+    text-align: left;
+    padding: 12px 14px;
+    border: 1px solid rgba(0, 247, 255, 0.18);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text);
+    transition: 0.2s;
+}
+
+.quiz-option:hover {
+    border-color: var(--cyan);
+}
+
+.quiz-option.correct {
+    border-color: var(--green);
+    background: rgba(66, 245, 158, 0.12);
+}
+
+.quiz-option.wrong {
+    border-color: var(--rose);
+    background: rgba(255, 94, 168, 0.12);
+}
+
+.quiz-status {
+    display: flex;
+    justify-content: space-between;
+    color: var(--muted);
+    font-size: 0.88rem;
+    margin-bottom: 16px;
+}
+
+.quiz-feedback {
+    min-height: 54px;
+    margin-top: 14px;
+    color: var(--muted);
+}
+
+.glossary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.term {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--panel-soft);
+    padding: 18px;
+}
+
+.term strong {
+    display: block;
+    color: var(--amber);
+    font-family: "Orbitron", sans-serif;
+    margin-bottom: 8px;
+}
+
+.term span {
+    color: var(--muted);
+    font-size: 0.92rem;
+}
+
+.script-grid {
+    display: grid;
+    grid-template-columns: minmax(260px, 0.72fr) minmax(320px, 1.28fr);
+    gap: 24px;
+}
+
+.checklist {
+    display: grid;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: var(--muted);
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.check-item input {
+    width: 18px;
+    height: 18px;
+    margin-top: 4px;
+    accent-color: var(--green);
+}
+
+.script-list {
+    counter-reset: step;
+    display: grid;
+    gap: 12px;
+}
+
+.script-step {
+    counter-increment: step;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px;
+    align-items: start;
+    color: var(--muted);
+}
+
+.script-step::before {
+    content: counter(step);
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    background: var(--cyan);
+    color: #00111c;
+    font-family: "Orbitron", sans-serif;
+    font-weight: 800;
+}
+
+.bibliografia ul {
+    display: grid;
+    gap: 10px;
+    list-style: none;
+    margin-top: 14px;
+}
+
+.bibliografia a {
+    color: var(--cyan);
+    text-decoration: none;
+}
+
+.bibliografia a:hover {
+    text-decoration: underline;
+}
+
+.to-top {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.to-top.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+footer {
+    text-align: center;
+    padding: 80px 20px;
+    background: #02040b;
+    border-top: 1px solid rgba(0, 247, 255, 0.15);
+    position: relative;
+}
+
+body.light-mode footer {
+    background: #e8eeff;
+}
+
+footer h2 {
+    color: var(--cyan);
+    margin-bottom: 15px;
+    font-family: "Orbitron", sans-serif;
+    letter-spacing: 0;
+}
+
+footer p {
+    color: var(--muted);
+    font-weight: 300;
+}
+
+.integrantes-box {
+    margin-top: 30px;
+    display: inline-block;
+    padding: 20px 34px;
+    background: rgba(255, 255, 255, 0.035);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.presentation-mode nav,
+.presentation-mode .to-top,
+.presentation-mode .top-progress {
+    display: none;
+}
+
+.presentation-mode section {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+@media (max-width: 1040px) {
+    section {
+        padding: 84px 6%;
+    }
+
+    .lab-grid,
+    .tool-grid,
+    .script-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    nav {
+        gap: 12px;
+        padding: 14px 10px;
+    }
+
+    nav a {
+        font-size: 0.74rem;
+    }
+
+    .timeline::before {
+        left: 20px;
+    }
+
+    .timeline-item {
+        width: 100%;
+        left: 0 !important;
+        text-align: left !important;
+        padding-left: 45px;
+        padding-right: 0;
+        margin-bottom: 24px;
+    }
+
+    .timeline-item:nth-child(odd)::after,
+    .timeline-item:nth-child(even)::after {
+        left: 14px;
+    }
+}
+
+@media (max-width: 640px) {
+    .hero {
+        padding-top: 150px;
+    }
+
+    .hero-stats,
+    .metric-row {
+        grid-template-columns: 1fr;
+    }
+
+    .card {
+        padding: 24px;
+    }
+
+    .fact-box,
+    .lab-panel,
+    .quiz-panel,
+    .tool-panel,
+    .script-panel,
+    .bibliografia {
+        padding: 22px;
+    }
+
+    .nav-actions {
+        width: 100%;
+        justify-content: center;
+    }
+}
+</style>
+</head>
+
+<body>
+<div class="top-progress" id="topProgress"></div>
+
+<div class="bg-animation" aria-hidden="true">
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+</div>
+<div class="scanline" aria-hidden="true"></div>
+
+<nav aria-label="Navegação principal">
+    <a href="#historia-ia">História</a>
+    <a href="#programacao">Programação</a>
+    <a href="#matematica">Matemática</a>
+    <a href="#ia-programacao">IA</a>
+    <a href="#laboratorio">Laboratório</a>
+    <a href="#ferramentas">Ferramentas</a>
+    <a href="#quiz">Quiz</a>
+    <a href="#roteiro">Apresentação</a>
+    <div class="nav-actions">
+        <button class="icon-btn" id="themeBtn" type="button" title="Alternar tema" aria-label="Alternar tema"><i class="fa-solid fa-circle-half-stroke"></i></button>
+        <button class="icon-btn" id="presentationBtn" type="button" title="Modo apresentação" aria-label="Modo apresentação"><i class="fa-solid fa-display"></i></button>
+    </div>
+</nav>
+
+<section class="hero fade-in" id="inicio">
+    <div class="hero-tag">SISTEMA ATIVO // SCIENCE_2026</div>
+    <h1>MATEMÁTICA<br>IA & PROGRAMAÇÃO</h1>
+    <h2>Feira de Ciências 2026</h2>
+    <p>
+        Um projeto interativo para mostrar como fórmulas, algoritmos e dados formam a base das tecnologias que usamos todos os dias: celulares, jogos, mapas, bancos, redes sociais, medicina, clima e inteligência artificial.
+    </p>
+    <div class="hero-actions">
+        <a href="#laboratorio" class="hero-btn"><i class="fa-solid fa-flask"></i> Abrir laboratório</a>
+        <a href="#roteiro" class="ghost-btn"><i class="fa-solid fa-chalkboard-user"></i> Roteiro da apresentação</a>
+    </div>
+    <div class="hero-stats" aria-label="Resumo do projeto">
+        <div class="stat">
+            <strong>8</strong>
+            <span>marcos históricos da IA</span>
+        </div>
+        <div class="stat">
+            <strong>4</strong>
+            <span>ferramentas interativas</span>
+        </div>
+        <div class="stat">
+            <strong>10</strong>
+            <span>perguntas no quiz</span>
+        </div>
+        <div class="stat">
+            <strong>100%</strong>
+            <span>feito para apresentar</span>
+        </div>
+    </div>
+</section>
+
+<section id="historia-ia" class="fade-in">
+    <h2 class="section-title">A Linha do Tempo Cibernética</h2>
+    <p class="section-lead">A inteligência artificial não surgiu do nada. Ela é resultado de séculos de matemática, lógica, engenharia, computação e imaginação científica.</p>
+    <div class="timeline">
+        <div class="timeline-item">
+            <div class="timeline-content">
+                <h3>1843</h3>
+                <p><strong>Ada Lovelace</strong> escreve o primeiro algoritmo projetado para ser processado por uma máquina, tornando-se a primeira programadora da história.</p>
+                <a href="https://pt.wikipedia.org/wiki/Ada_Lovelace" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-link"></i> Fonte</a>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-content">
+                <h3>1950</h3>
+                <p><strong>Alan Turing</strong> publica "Computing Machinery and Intelligence", propondo o Teste de Turing para discutir se máquinas poderiam demonstrar inteligência.</p>
+                <a href="https://pt.wikipedia.org/wiki/Teste_de_Turing" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-link"></i> Fonte</a>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-content">
+                <h3>1956</h3>
+                <p>A expressão <strong>Inteligência Artificial</strong> é consolidada na Conferência de Dartmouth, marco importante para o campo acadêmico.</p>
+                <a href="https://pt.wikipedia.org/wiki/Confer%C3%AAncia_de_Dartmouth" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-link"></i> Fonte</a>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-content">
+                <h3>1966</h3>
+                <p>No MIT, <strong>ELIZA</strong> simula um diálogo terapêutico simples e se torna uma das primeiras experiências famosas com linguagem natural.</p>
+                <a href="https://pt.wikipedia.org/wiki/ELIZA" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-link"></i> Fonte</a>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-content">
+                <h3>1997</h3>
+                <p>O supercomputador <strong>Deep Blue</strong>, da IBM, derrota Garry Kasparov no xadrez e mostra a força da busca computacional combinada com avaliação matemática.</p>
+                <a href="https://pt.wikipedia.org/wiki/Deep_Blue" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-link"></i> Fonte</a>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-content">
+                <h3>2012</h3>
+                <p>A rede neural <strong>AlexNet</strong> impulsiona o aprendizado profundo ao obter grande destaque em visão computacional.</p>
+                <a href="https://pt.wikipedia.org/wiki/Aprendizagem_profunda" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-link"></i> Fonte</a>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-content">
+                <h3>2022</h3>
+                <p>A <strong>IA generativa</strong> se populariza, transformando criação de texto, imagem, código, estudo, pesquisa e produtividade.</p>
+                <a href="https://pt.wikipedia.org/wiki/Intelig%C3%AAncia_artificial_generativa" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-link"></i> Fonte</a>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-content">
+                <h3>Futuro</h3>
+                <p>O desafio continua: criar sistemas mais úteis, seguros, explicáveis e alinhados às necessidades humanas.</p>
+                <a href="https://pt.wikipedia.org/wiki/Intelig%C3%AAncia_artificial_geral" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-link"></i> Fonte</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="programacao" class="fade-in">
+    <h2 class="section-title">Ecossistema de Programação</h2>
+    <p class="section-lead">Programar é transformar uma ideia em instruções claras. Quando essas instruções são bem organizadas, computadores conseguem repetir tarefas, analisar dados e resolver problemas em escala.</p>
+    <div class="cards">
+        <div class="card">
+            <h3><i class="fa-solid fa-code"></i> O que é?</h3>
+            <p>Programação é a criação de algoritmos e códigos estruturados para fazer computadores, celulares, placas, robôs e servidores executarem tarefas.</p>
+            <a href="https://pt.wikipedia.org/wiki/Programa%C3%A7%C3%A3o_de_computadores" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> Base</a>
+        </div>
+        <div class="card">
+            <h3><i class="fa-solid fa-laptop-code"></i> Linguagens</h3>
+            <p>Python é muito usado em IA, JavaScript domina grande parte da Web, C++ aparece quando desempenho é essencial e Java segue forte em sistemas corporativos.</p>
+            <a href="https://www.tiobe.com/tiobe-index/" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> Índice</a>
+        </div>
+        <div class="card">
+            <h3><i class="fa-solid fa-gamepad"></i> Jogos</h3>
+            <p>Jogos usam programação para física, colisões, inteligência de personagens, renderização 3D, áudio, rede e interação em tempo real.</p>
+            <a href="https://pt.wikipedia.org/wiki/Desenvolvimento_de_jogos_eletr%C3%B4nicos" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> Jogos</a>
+        </div>
+        <div class="card">
+            <h3><i class="fa-solid fa-shield-halved"></i> Segurança</h3>
+            <p>Criptografia, autenticação, análise de vulnerabilidades e programação defensiva protegem dados pessoais, bancos, empresas e governos.</p>
+            <a href="https://pt.wikipedia.org/wiki/Seguran%C3%A7a_da_informa%C3%A7%C3%A3o" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> Segurança</a>
+        </div>
+        <div class="card">
+            <h3><i class="fa-solid fa-network-wired"></i> IoT</h3>
+            <p>Relógios, lâmpadas, câmeras, sensores agrícolas e aparelhos inteligentes rodam pequenos programas conectados à internet.</p>
+            <a href="https://pt.wikipedia.org/wiki/Internet_das_coisas" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> IoT</a>
+        </div>
+        <div class="card">
+            <h3><i class="fa-solid fa-mobile-screen"></i> Mobile & Cloud</h3>
+            <p>Aplicativos conversam com servidores em nuvem para salvar dados, processar pagamentos, recomendar conteúdos e sincronizar informações.</p>
+            <a href="https://pt.wikipedia.org/wiki/Computa%C3%A7%C3%A3o_em_nuvem" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> Nuvem</a>
+        </div>
+    </div>
+</section>
+
+<section id="matematica" class="fade-in">
+    <h2 class="section-title">A Matemática no Mundo Real</h2>
+    <p class="section-lead">A matemática aparece quando precisamos medir, prever, comparar, otimizar e tomar decisões. Ela é a linguagem invisível por trás de muita tecnologia moderna.</p>
+    <div class="cards">
+        <div class="card">
+            <h3><i class="fa-solid fa-building"></i> Engenharia Civil</h3>
+            <p>Cálculo estrutural, geometria, forças, resistência dos materiais e estatística ajudam pontes e prédios a serem seguros.</p>
+            <a href="https://pt.wikipedia.org/wiki/Engenharia_civil" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> Engenharia</a>
+        </div>
+        <div class="card">
+            <h3><i class="fa-solid fa-money-bill-wave"></i> Finanças</h3>
+            <p>Juros, inflação, investimentos, crédito, seguros e mercado financeiro dependem de porcentagem, funções, estatística e probabilidade.</p>
+            <a href="https://pt.wikipedia.org/wiki/Matem%C3%A1tica_financeira" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> Finanças</a>
+        </div>
+        <div class="card">
+            <h3><i class="fa-solid fa-satellite"></i> Espaço</h3>
+            <p>Órbitas, lançamentos e missões usam trigonometria, cálculo, mecânica celeste e simulações numéricas.</p>
+            <a href="https://pt.wikipedia.org/wiki/Mec%C3%A2nica_celeste" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> Órbitas</a>
+        </div>
+        <div class="card">
+            <h3><i class="fa-solid fa-heart-pulse"></i> Medicina</h3>
+            <p>Tomografias, ressonâncias e exames digitais usam processamento de sinais e reconstrução matemática de imagens.</p>
+            <a href="https://pt.wikipedia.org/wiki/Transformada_de_Fourier" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> Fourier</a>
+        </div>
+        <div class="card">
+            <h3><i class="fa-solid fa-cloud-sun"></i> Clima</h3>
+            <p>Previsões do tempo usam equações, modelos físicos, dados de sensores e supercomputadores para simular a atmosfera.</p>
+            <a href="https://pt.wikipedia.org/wiki/Previs%C3%A3o_num%C3%A9rica_do_tempo" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> Clima</a>
+        </div>
+        <div class="card">
+            <h3><i class="fa-solid fa-wifi"></i> Criptografia</h3>
+            <p>Mensagens, senhas e transações dependem de matemática discreta, números primos e algoritmos de segurança.</p>
+            <a href="https://pt.wikipedia.org/wiki/Criptografia_assimetrica" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> Cripto</a>
+        </div>
+    </div>
+</section>
+
+<section id="ia-programacao" class="fade-in">
+    <h2 class="section-title">O Núcleo Matemático da IA</h2>
+    <p class="section-lead">Uma IA aprende encontrando padrões em dados. Por trás disso existem vetores, matrizes, probabilidades, funções, erros e ajustes sucessivos.</p>
+    <div class="cards">
+        <div class="card">
+            <h3><i class="fa-solid fa-square-root-variable"></i> Álgebra Linear</h3>
+            <p>Imagens, textos e sons podem virar vetores e matrizes. Isso permite que GPUs processem muitos cálculos ao mesmo tempo.</p>
+            <a href="https://pt.wikipedia.org/wiki/%C3%81lgebra_linear" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> Álgebra</a>
+        </div>
+        <div class="card">
+            <h3><i class="fa-solid fa-chart-line"></i> Probabilidade</h3>
+            <p>Modelos fazem previsões aproximadas. Eles calculam quais respostas, classes ou decisões parecem mais prováveis.</p>
+            <a href="https://pt.wikipedia.org/wiki/Teorema_de_Bayes" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> Bayes</a>
+        </div>
+        <div class="card">
+            <h3><i class="fa-solid fa-chart-area"></i> Cálculo</h3>
+            <p>A descida do gradiente usa a ideia de derivadas para reduzir erros durante o treinamento de modelos.</p>
+            <a href="https://pt.wikipedia.org/wiki/Gradiente_descendente" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> Gradiente</a>
+        </div>
+        <div class="card">
+            <h3><i class="fa-solid fa-diagram-project"></i> Grafos</h3>
+            <p>Redes sociais, rotas e recomendações podem ser representadas por nós e conexões, uma ideia central da teoria dos grafos.</p>
+            <a href="https://pt.wikipedia.org/wiki/Teoria_dos_grafos" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> Grafos</a>
+        </div>
+        <div class="card">
+            <h3><i class="fa-solid fa-brain"></i> Redes Neurais</h3>
+            <p>Camadas de neurônios artificiais combinam entradas, pesos e vieses para produzir respostas cada vez melhores.</p>
+            <a href="https://pt.wikipedia.org/wiki/Rede_neural_artificial" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> Redes</a>
+        </div>
+        <div class="card">
+            <h3><i class="fa-solid fa-code-branch"></i> Lógica Booleana</h3>
+            <p>Na base do computador estão decisões simples: verdadeiro ou falso, ligado ou desligado, 1 ou 0.</p>
+            <a href="https://pt.wikipedia.org/wiki/L%C3%B3gica_booleana" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> Lógica</a>
+        </div>
+    </div>
+    <div class="fact-box">
+        A matemática não é apenas usada pela Inteligência Artificial; grande parte da Inteligência Artificial é matemática aplicada em alta velocidade. Dados viram números, números passam por funções, funções geram erros, e os erros orientam o aprendizado.
+        <a href="https://www.coursera.org/articles/mathematics-for-machine-learning" target="_blank" rel="noreferrer" class="source-link" style="display:flex; margin-top:15px;"><i class="fa-solid fa-graduation-cap"></i> Leitura complementar</a>
+    </div>
+</section>
+
+<section id="laboratorio" class="fade-in">
+    <h2 class="section-title">Laboratório Interativo</h2>
+    <p class="section-lead">Esta parte foi feita para impressionar na apresentação: mexa nos controles e mostre, ao vivo, como matemática e programação alteram o comportamento de um sistema.</p>
+    <div class="lab-grid">
+        <div class="lab-panel">
+            <h3 class="panel-title"><i class="fa-solid fa-network-wired"></i> Simulador de Rede Neural</h3>
+            <p class="panel-copy">Os controles abaixo mudam entradas de um modelo simplificado. O desenho mostra camadas, conexões e intensidade dos pesos.</p>
+            <div class="nn-wrap">
+                <canvas id="networkCanvas" width="900" height="520" aria-label="Visualização de rede neural"></canvas>
+            </div>
+        </div>
+        <div class="lab-panel">
+            <h3 class="panel-title"><i class="fa-solid fa-sliders"></i> Entradas do Modelo</h3>
+            <div class="controls">
+                <div class="control">
+                    <label for="mathRange">Matemática <strong id="mathValue">70</strong></label>
+                    <input id="mathRange" type="range" min="0" max="100" value="70">
+                </div>
+                <div class="control">
+                    <label for="codeRange">Programação <strong id="codeValue">65</strong></label>
+                    <input id="codeRange" type="range" min="0" max="100" value="65">
+                </div>
+                <div class="control">
+                    <label for="dataRange">Qualidade dos dados <strong id="dataValue">80</strong></label>
+                    <input id="dataRange" type="range" min="0" max="100" value="80">
+                </div>
+                <div class="control">
+                    <label for="ethicsRange">Ética e revisão humana <strong id="ethicsValue">75</strong></label>
+                    <input id="ethicsRange" type="range" min="0" max="100" value="75">
+                </div>
+            </div>
+            <div class="result-box">
+                <strong id="aiScore">76%</strong>
+                <span id="aiMessage">Modelo equilibrado: bom desempenho com necessidade de revisão.</span>
+            </div>
+            <div class="metric-row">
+                <div class="metric">
+                    <span>Erro simulado</span>
+                    <b id="errorMetric">0.24</b>
+                </div>
+                <div class="metric">
+                    <span>Confiança</span>
+                    <b id="trustMetric">Média</b>
+                </div>
+                <div class="metric">
+                    <span>Risco</span>
+                    <b id="riskMetric">Moderado</b>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="ferramentas" class="fade-in">
+    <h2 class="section-title">Ferramentas de Demonstração</h2>
+    <p class="section-lead">Use estas mini ferramentas para explicar conceitos difíceis de forma simples durante a feira.</p>
+    <div class="tool-grid">
+        <div class="tool-panel">
+            <h3 class="panel-title"><i class="fa-solid fa-binary"></i> Conversor Texto ↔ Binário</h3>
+            <p class="panel-copy">Mostra como letras podem ser representadas por números em sistemas digitais.</p>
+            <div class="field">
+                <label for="textInput">Texto</label>
+                <textarea id="textInput" rows="3" placeholder="Digite uma palavra, por exemplo: IA">IA</textarea>
+            </div>
+            <button class="mini-btn" type="button" id="binaryBtn"><i class="fa-solid fa-right-left"></i> Converter</button>
+            <div class="mono-output" id="binaryOutput" aria-live="polite"></div>
+        </div>
+
+        <div class="tool-panel">
+            <h3 class="panel-title"><i class="fa-solid fa-percent"></i> Calculadora de Bayes</h3>
+            <p class="panel-copy">Demonstra como uma nova evidência muda a probabilidade de uma hipótese.</p>
+            <div class="field">
+                <label for="prevalence">Probabilidade inicial (%)</label>
+                <input id="prevalence" type="number" min="1" max="99" value="10">
+            </div>
+            <div class="field">
+                <label for="sensitivity">Chance do teste acertar positivo (%)</label>
+                <input id="sensitivity" type="number" min="1" max="99" value="90">
+            </div>
+            <div class="field">
+                <label for="falsePositive">Chance de falso positivo (%)</label>
+                <input id="falsePositive" type="number" min="1" max="99" value="8">
+            </div>
+            <button class="mini-btn" type="button" id="bayesBtn"><i class="fa-solid fa-calculator"></i> Calcular</button>
+            <div class="result-box">
+                <strong id="bayesResult">55.6%</strong>
+                <span>Probabilidade após uma evidência positiva.</span>
+            </div>
+        </div>
+
+        <div class="tool-panel">
+            <h3 class="panel-title"><i class="fa-solid fa-chart-simple"></i> Descida do Gradiente</h3>
+            <p class="panel-copy">O ponto se move procurando o menor erro, como um modelo ajustando seus pesos.</p>
+            <div class="nn-wrap">
+                <canvas id="gradientCanvas" width="900" height="520" aria-label="Demonstração de descida do gradiente"></canvas>
+            </div>
+            <button class="mini-btn" type="button" id="gradientBtn"><i class="fa-solid fa-play"></i> Rodar treino</button>
+        </div>
+
+        <div class="tool-panel">
+            <h3 class="panel-title"><i class="fa-solid fa-magnifying-glass"></i> Glossário Inteligente</h3>
+            <p class="panel-copy">Pesquise termos importantes para responder perguntas dos visitantes.</p>
+            <input class="glossary-search" id="glossarySearch" type="search" placeholder="Busque por IA, vetor, algoritmo, dados...">
+            <div class="glossary-grid" id="glossaryGrid"></div>
+        </div>
+    </div>
+</section>
+
+<section id="quiz" class="fade-in">
+    <h2 class="section-title">Quiz da Feira</h2>
+    <p class="section-lead">Uma atividade rápida para envolver a turma e testar se o público entendeu a explicação.</p>
+    <div class="quiz-panel">
+        <div class="quiz-status">
+            <span id="questionCount">Pergunta 1 de 10</span>
+            <span id="quizScore">Pontuação: 0</span>
+        </div>
+        <h3 class="panel-title" id="quizQuestion"><i class="fa-solid fa-circle-question"></i></h3>
+        <div id="quizOptions"></div>
+        <p class="quiz-feedback" id="quizFeedback" aria-live="polite"></p>
+        <button class="mini-btn" type="button" id="nextQuestion"><i class="fa-solid fa-forward-step"></i> Próxima</button>
+    </div>
+</section>
+
+<section id="carreira" class="fade-in">
+    <h2 class="section-title">Passo a Passo Profissional</h2>
+    <p class="section-lead">Para quem se interessou pelo tema, este é um caminho possível para transformar curiosidade em carreira.</p>
+    <div class="cards">
+        <div class="card career-card" data-step="// PASSO_01">
+            <h3><i class="fa-solid fa-graduation-cap"></i> Formação Base</h3>
+            <p>Comece por Ciência da Computação, Engenharia de Software, Sistemas de Informação, Matemática ou cursos técnicos da área.</p>
+            <a href="https://guiadoestudante.abril.com.br/profissoes/ciencia-da-computacao/" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-user-gear"></i> Perfil</a>
+        </div>
+        <div class="card career-card" data-step="// PASSO_02">
+            <h3><i class="fa-solid fa-laptop-code"></i> Aprenda a Programar</h3>
+            <p>Domine lógica, estruturas de dados e Python, uma linguagem muito usada em ciência de dados e IA.</p>
+            <a href="https://www.python.org/about/" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-terminal"></i> Python</a>
+        </div>
+        <div class="card career-card" data-step="// PASSO_03">
+            <h3><i class="fa-solid fa-calculator"></i> Reforce Matemática</h3>
+            <p>Estude estatística, probabilidade, álgebra linear, funções e cálculo para entender os modelos por dentro.</p>
+            <a href="https://www.khanacademy.org/math" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-calculator"></i> Estudos</a>
+        </div>
+        <div class="card career-card" data-step="// PASSO_04">
+            <h3><i class="fa-solid fa-microchip"></i> Especialização</h3>
+            <p>Depois da base, avance para Machine Learning, Deep Learning, bancos de dados, ética em IA e projetos práticos.</p>
+            <a href="https://www.alura.com.br/cursos-online-data-science/machine-learning" target="_blank" rel="noreferrer" class="source-link"><i class="fa-solid fa-layer-group"></i> Cursos</a>
+        </div>
+        <div class="card career-card" data-step="// PASSO_05">
+            <h3><i class="fa-solid fa-folder-open"></i> Portfólio</h3>
+            <p>Crie projetos reais: análise de notas, previsão de gastos, classificador de imagens, chatbot simples ou painel de dados.</p>
+            <a href="https://github.com/" target="_blank" rel="noreferrer" class="source-link"><i class="fa-brands fa-github"></i> GitHub</a>
+        </div>
+        <div class="card career-card" data-step="// PASSO_06">
+            <h3><i class="fa-solid fa-briefcase"></i> Mercado</h3>
+            <p>Busque comunidades, eventos, estágios, projetos escolares e experiências em análise de dados ou desenvolvimento.</p>
+            <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer" class="source-link"><i class="fa-brands fa-linkedin"></i> Rede</a>
+        </div>
+    </div>
+</section>
+
+<section id="curiosidades" class="fade-in">
+    <h2 class="section-title">Curiosidades do Sistema</h2>
+    <div class="fact-box">
+        <p>• O número pi possui infinitas casas decimais e aparece em circunferências, ondas, órbitas e cálculos científicos. <a href="https://pt.wikipedia.org/wiki/Pi" target="_blank" rel="noreferrer" class="inline-source">[Fonte]</a></p>
+        <p>• Computadores usam sistema binário porque circuitos eletrônicos distinguem estados como ligado e desligado. <a href="https://pt.wikipedia.org/wiki/Sistema_bin%C3%A1rio_(matem%C3%A1tica)" target="_blank" rel="noreferrer" class="inline-source">[Fonte]</a></p>
+        <p>• Reconhecimento facial transforma imagens em padrões numéricos para comparar características. <a href="https://pt.wikipedia.org/wiki/Reconhecimento_facial" target="_blank" rel="noreferrer" class="inline-source">[Fonte]</a></p>
+        <p>• Gráficos 3D usam vetores, matrizes, trigonometria e iluminação calculada em tempo real. <a href="https://pt.wikipedia.org/wiki/Computa%C3%A7%C3%A3o_gr%C3%A1fica_3D" target="_blank" rel="noreferrer" class="inline-source">[Fonte]</a></p>
+        <p>• Redes neurais profundas aprendem ajustando pesos matemáticos em muitas camadas. <a href="https://pt.wikipedia.org/wiki/Rede_neural_artificial" target="_blank" rel="noreferrer" class="inline-source">[Fonte]</a></p>
+        <p>• O GPS combina satélites, tempo, geometria e correções matemáticas para estimar localização. <a href="https://pt.wikipedia.org/wiki/Sistema_de_posicionamento_global" target="_blank" rel="noreferrer" class="inline-source">[Fonte]</a></p>
+    </div>
+</section>
+
+<section id="roteiro" class="fade-in">
+    <h2 class="section-title">Roteiro de Apresentação</h2>
+    <p class="section-lead">Uma estrutura pronta para apresentar com clareza, responder perguntas e mostrar domínio do tema.</p>
+    <div class="script-grid">
+        <div class="script-panel">
+            <h3 class="panel-title"><i class="fa-solid fa-list-check"></i> Checklist</h3>
+            <p class="panel-copy">Marque o que já está pronto. O navegador salva automaticamente.</p>
+            <div class="checklist" id="checklist">
+                <label class="check-item"><input type="checkbox" data-check="banner"> Banner ou cartaz com título e integrantes</label>
+                <label class="check-item"><input type="checkbox" data-check="site"> Site aberto no computador ou projetor</label>
+                <label class="check-item"><input type="checkbox" data-check="fala"> Fala dividida entre todos os integrantes</label>
+                <label class="check-item"><input type="checkbox" data-check="quiz"> Quiz preparado para o público</label>
+                <label class="check-item"><input type="checkbox" data-check="fontes"> Fontes e referências revisadas</label>
+            </div>
+        </div>
+        <div class="script-panel">
+            <h3 class="panel-title"><i class="fa-solid fa-person-chalkboard"></i> Sequência Recomendada</h3>
+            <div class="tabs" role="tablist" aria-label="Roteiro por duração">
+                <button class="tab-btn active" type="button" data-tab="curto">3 minutos</button>
+                <button class="tab-btn" type="button" data-tab="medio">6 minutos</button>
+                <button class="tab-btn" type="button" data-tab="longo">10 minutos</button>
+            </div>
+            <div class="tab-content active" id="tab-curto">
+                <div class="script-list">
+                    <div class="script-step">Apresente a pergunta central: por que matemática, IA e programação estão conectadas?</div>
+                    <div class="script-step">Mostre a linha do tempo e destaque Turing, Dartmouth e IA generativa.</div>
+                    <div class="script-step">Abra o laboratório, mexa nos controles e explique entrada, peso, erro e previsão.</div>
+                    <div class="script-step">Finalize com o quiz e uma frase de impacto sobre tecnologia responsável.</div>
+                </div>
+            </div>
+            <div class="tab-content" id="tab-medio">
+                <div class="script-list">
+                    <div class="script-step">Explique que matemática transforma fenômenos reais em modelos.</div>
+                    <div class="script-step">Mostre exemplos: medicina, clima, GPS, jogos, bancos e criptografia.</div>
+                    <div class="script-step">Use o conversor binário para mostrar como computadores representam informação.</div>
+                    <div class="script-step">Use Bayes para explicar decisão com incerteza.</div>
+                    <div class="script-step">Mostre a descida do gradiente como uma busca pelo menor erro.</div>
+                </div>
+            </div>
+            <div class="tab-content" id="tab-longo">
+                <div class="script-list">
+                    <div class="script-step">Comece com uma situação cotidiana: mapa, rede social, banco ou celular.</div>
+                    <div class="script-step">Passe pela história da IA, mostrando que ideias antigas viraram tecnologia atual.</div>
+                    <div class="script-step">Explique programação como a ponte entre problema humano e execução da máquina.</div>
+                    <div class="script-step">Explique matemática como a estrutura que permite medir, prever e otimizar.</div>
+                    <div class="script-step">Demonstre rede neural, binário, Bayes, gradiente e glossário.</div>
+                    <div class="script-step">Finalize falando de carreira, ética, fontes e perguntas do público.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="fontes" class="fade-in">
+    <h2 class="section-title">Bibliografia e Fontes</h2>
+    <div class="bibliografia">
+        <h3 class="panel-title"><i class="fa-solid fa-book-open"></i> Referências para pesquisa</h3>
+        <p class="panel-copy">Use esta área para mostrar que o projeto foi pesquisado e não ficou apenas em opinião.</p>
+        <ul>
+            <li><a href="https://pt.wikipedia.org/wiki/Intelig%C3%AAncia_artificial" target="_blank" rel="noreferrer">Inteligência Artificial - Wikipédia</a></li>
+            <li><a href="https://pt.wikipedia.org/wiki/Aprendizagem_de_m%C3%A1quina" target="_blank" rel="noreferrer">Aprendizagem de Máquina - Wikipédia</a></li>
+            <li><a href="https://pt.wikipedia.org/wiki/Programa%C3%A7%C3%A3o_de_computadores" target="_blank" rel="noreferrer">Programação de Computadores - Wikipédia</a></li>
+            <li><a href="https://pt.wikipedia.org/wiki/%C3%81lgebra_linear" target="_blank" rel="noreferrer">Álgebra Linear - Wikipédia</a></li>
+            <li><a href="https://www.khanacademy.org/math/statistics-probability" target="_blank" rel="noreferrer">Khan Academy - Estatística e Probabilidade</a></li>
+            <li><a href="https://www.python.org/about/" target="_blank" rel="noreferrer">Python Software Foundation - Sobre Python</a></li>
+        </ul>
+    </div>
+</section>
+
+<footer>
+    <h2>Feira de Ciências 2026</h2>
+    <p>Projeto de pesquisa sobre Matemática, Inteligência Artificial e Programação</p>
+
+    <div class="integrantes-box">
+        <p style="color: var(--cyan); font-weight: 600; font-family: 'Orbitron', sans-serif; margin-bottom: 10px;">INTEGRANTES DO PROJETO</p>
+        <p style="color: var(--text);">
+            Luis Daniel &nbsp;|&nbsp; Arthur Rodrigues &nbsp;|&nbsp; Conrado de Sá &nbsp;|&nbsp; Levi Marcos
+        </p>
+        <p style="opacity: 0.55; font-size: 0.85rem; margin-top: 15px;">
+            Orientação: Baltazar Lisboa
+        </p>
+    </div>
+</footer>
+
+<a href="#inicio" class="icon-btn to-top" id="toTop" title="Voltar ao topo" aria-label="Voltar ao topo"><i class="fa-solid fa-arrow-up"></i></a>
+
+<script>
+const $ = (selector) => document.querySelector(selector);
+const $$ = (selector) => [...document.querySelectorAll(selector)];
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add("show");
+        }
+    });
+}, { threshold: 0.1 });
+
+$$(".fade-in").forEach((el) => observer.observe(el));
+
+const sections = $$("section[id]");
+const navLinks = $$("nav a[href^='#']");
+
+function updateScrollUI() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    $("#topProgress").style.width = `${docHeight > 0 ? (scrollTop / docHeight) * 100 : 0}%`;
+    $("#toTop").classList.toggle("visible", scrollTop > 600);
+
+    let activeId = "inicio";
+    sections.forEach((section) => {
+        if (scrollTop >= section.offsetTop - 180) {
+            activeId = section.id;
+        }
+    });
+    navLinks.forEach((link) => {
+        link.classList.toggle("active", link.getAttribute("href") === `#${activeId}`);
+    });
+}
+
+window.addEventListener("scroll", updateScrollUI);
+updateScrollUI();
+
+$("#themeBtn").addEventListener("click", () => {
+    document.body.classList.toggle("light-mode");
+    localStorage.setItem("science-theme", document.body.classList.contains("light-mode") ? "light" : "dark");
+    drawNetwork();
+    drawGradient();
+});
+
+if (localStorage.getItem("science-theme") === "light") {
+    document.body.classList.add("light-mode");
+}
+
+$("#presentationBtn").addEventListener("click", () => {
+    document.body.classList.toggle("presentation-mode");
+});
+
+const inputs = {
+    math: $("#mathRange"),
+    code: $("#codeRange"),
+    data: $("#dataRange"),
+    ethics: $("#ethicsRange")
+};
+
+function modelScore() {
+    const math = Number(inputs.math.value);
+    const code = Number(inputs.code.value);
+    const data = Number(inputs.data.value);
+    const ethics = Number(inputs.ethics.value);
+    const base = math * 0.28 + code * 0.26 + data * 0.3 + ethics * 0.16;
+    const balancePenalty = Math.max(math, code, data, ethics) - Math.min(math, code, data, ethics);
+    return Math.max(0, Math.min(100, Math.round(base - balancePenalty * 0.08)));
+}
+
+function updateModel() {
+    $("#mathValue").textContent = inputs.math.value;
+    $("#codeValue").textContent = inputs.code.value;
+    $("#dataValue").textContent = inputs.data.value;
+    $("#ethicsValue").textContent = inputs.ethics.value;
+
+    const score = modelScore();
+    const error = ((100 - score) / 100).toFixed(2);
+    $("#aiScore").textContent = `${score}%`;
+    $("#errorMetric").textContent = error;
+
+    let message = "Modelo equilibrado: bom desempenho com necessidade de revisão.";
+    let trust = "Média";
+    let risk = "Moderado";
+
+    if (score >= 85) {
+        message = "Modelo forte: bons dados, boa lógica e revisão humana consistente.";
+        trust = "Alta";
+        risk = "Baixo";
+    } else if (score < 55) {
+        message = "Modelo frágil: falta base matemática, código, dados ou revisão ética.";
+        trust = "Baixa";
+        risk = "Alto";
+    }
+
+    $("#aiMessage").textContent = message;
+    $("#trustMetric").textContent = trust;
+    $("#riskMetric").textContent = risk;
+    drawNetwork();
+}
+
+Object.values(inputs).forEach((input) => input.addEventListener("input", updateModel));
+
+const netCanvas = $("#networkCanvas");
+const netCtx = netCanvas.getContext("2d");
+let pulse = 0;
+
+function cssColor(name) {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+
+function drawNetwork() {
+    const w = netCanvas.width;
+    const h = netCanvas.height;
+    const dark = !document.body.classList.contains("light-mode");
+    const score = modelScore() / 100;
+    netCtx.clearRect(0, 0, w, h);
+    netCtx.fillStyle = dark ? "rgba(2, 4, 15, 0.64)" : "rgba(235, 242, 255, 0.88)";
+    netCtx.fillRect(0, 0, w, h);
+
+    const layers = [
+        [{ label: "Mat", value: Number(inputs.math.value) / 100 }, { label: "Cod", value: Number(inputs.code.value) / 100 }, { label: "Dados", value: Number(inputs.data.value) / 100 }, { label: "Ética", value: Number(inputs.ethics.value) / 100 }],
+        [{ label: "P1", value: score * 0.82 }, { label: "P2", value: score * 0.92 }, { label: "P3", value: score * 0.76 }],
+        [{ label: "H1", value: score * 0.95 }, { label: "H2", value: score * 0.7 }],
+        [{ label: "Saída", value: score }]
+    ];
+
+    const xs = [105, 350, 590, 790];
+    const positions = layers.map((layer, li) => {
+        const gap = h / (layer.length + 1);
+        return layer.map((node, ni) => ({
+            x: xs[li],
+            y: gap * (ni + 1),
+            ...node
+        }));
+    });
+
+    for (let li = 0; li < positions.length - 1; li++) {
+        positions[li].forEach((from, fi) => {
+            positions[li + 1].forEach((to, ti) => {
+                const intensity = Math.max(0.12, Math.min(1, (from.value + to.value) / 2));
+                const hue = (fi + ti + li) % 3;
+                const color = hue === 0 ? "0, 247, 255" : hue === 1 ? "66, 245, 158" : "255, 209, 102";
+                netCtx.strokeStyle = `rgba(${color}, ${0.16 + intensity * 0.48})`;
+                netCtx.lineWidth = 1 + intensity * 4;
+                netCtx.beginPath();
+                netCtx.moveTo(from.x, from.y);
+                const drift = Math.sin(pulse / 20 + fi + ti) * 18;
+                netCtx.bezierCurveTo(from.x + 90, from.y + drift, to.x - 90, to.y - drift, to.x, to.y);
+                netCtx.stroke();
+            });
+        });
+    }
+
+    positions.flat().forEach((node) => {
+        const radius = 18 + node.value * 12;
+        netCtx.beginPath();
+        netCtx.fillStyle = `rgba(0, 247, 255, ${0.15 + node.value * 0.32})`;
+        netCtx.arc(node.x, node.y, radius + Math.sin(pulse / 18) * 2, 0, Math.PI * 2);
+        netCtx.fill();
+
+        netCtx.beginPath();
+        netCtx.fillStyle = dark ? "#051626" : "#ffffff";
+        netCtx.strokeStyle = node.value > 0.78 ? cssColor("--green") : cssColor("--cyan");
+        netCtx.lineWidth = 3;
+        netCtx.arc(node.x, node.y, radius, 0, Math.PI * 2);
+        netCtx.fill();
+        netCtx.stroke();
+
+        netCtx.fillStyle = dark ? "#ffffff" : "#071426";
+        netCtx.font = "700 16px Poppins";
+        netCtx.textAlign = "center";
+        netCtx.fillText(node.label, node.x, node.y + 5);
+    });
+
+    netCtx.fillStyle = dark ? "rgba(255,255,255,0.7)" : "rgba(7,20,38,0.74)";
+    netCtx.font = "700 18px Orbitron";
+    netCtx.textAlign = "left";
+    netCtx.fillText(`Precisão simulada: ${Math.round(score * 100)}%`, 28, 38);
+}
+
+function animateNetwork() {
+    pulse += 1;
+    drawNetwork();
+    requestAnimationFrame(animateNetwork);
+}
+
+animateNetwork();
+updateModel();
+
+function convertBinary() {
+    const text = $("#textInput").value;
+    const binary = [...text].map((char) => char.charCodeAt(0).toString(2).padStart(8, "0")).join(" ");
+    $("#binaryOutput").textContent = binary || "Digite algo para converter.";
+}
+
+$("#binaryBtn").addEventListener("click", convertBinary);
+$("#textInput").addEventListener("input", convertBinary);
+convertBinary();
+
+function calculateBayes() {
+    const prevalence = Math.min(99, Math.max(1, Number($("#prevalence").value))) / 100;
+    const sensitivity = Math.min(99, Math.max(1, Number($("#sensitivity").value))) / 100;
+    const falsePositive = Math.min(99, Math.max(1, Number($("#falsePositive").value))) / 100;
+    const result = (sensitivity * prevalence) / ((sensitivity * prevalence) + (falsePositive * (1 - prevalence)));
+    $("#bayesResult").textContent = `${(result * 100).toFixed(1)}%`;
+}
+
+$("#bayesBtn").addEventListener("click", calculateBayes);
+["#prevalence", "#sensitivity", "#falsePositive"].forEach((id) => $(id).addEventListener("input", calculateBayes));
+calculateBayes();
+
+const gradientCanvas = $("#gradientCanvas");
+const gradientCtx = gradientCanvas.getContext("2d");
+let gradientX = -4.5;
+let gradientRunning = false;
+
+function f(x) {
+    return Math.pow(x - 2.2, 2) + 1.2;
+}
+
+function drawGradient() {
+    const w = gradientCanvas.width;
+    const h = gradientCanvas.height;
+    const dark = !document.body.classList.contains("light-mode");
+    gradientCtx.clearRect(0, 0, w, h);
+    gradientCtx.fillStyle = dark ? "rgba(2, 4, 15, 0.64)" : "rgba(235, 242, 255, 0.88)";
+    gradientCtx.fillRect(0, 0, w, h);
+
+    const mapX = (x) => ((x + 6) / 12) * w;
+    const mapY = (y) => h - (y / 72) * h - 28;
+
+    gradientCtx.strokeStyle = "rgba(0, 247, 255, 0.55)";
+    gradientCtx.lineWidth = 4;
+    gradientCtx.beginPath();
+    for (let px = -6; px <= 6; px += 0.05) {
+        const x = mapX(px);
+        const y = mapY(f(px));
+        if (px === -6) gradientCtx.moveTo(x, y);
+        else gradientCtx.lineTo(x, y);
+    }
+    gradientCtx.stroke();
+
+    const y = f(gradientX);
+    gradientCtx.beginPath();
+    gradientCtx.fillStyle = cssColor("--amber");
+    gradientCtx.strokeStyle = "rgba(255, 255, 255, 0.9)";
+    gradientCtx.lineWidth = 3;
+    gradientCtx.arc(mapX(gradientX), mapY(y), 15, 0, Math.PI * 2);
+    gradientCtx.fill();
+    gradientCtx.stroke();
+
+    gradientCtx.fillStyle = dark ? "rgba(255,255,255,0.75)" : "rgba(7,20,38,0.76)";
+    gradientCtx.font = "700 18px Orbitron";
+    gradientCtx.fillText(`x = ${gradientX.toFixed(2)} | erro = ${y.toFixed(2)}`, 28, 38);
+}
+
+function stepGradient() {
+    const learningRate = 0.08;
+    const derivative = 2 * (gradientX - 2.2);
+    gradientX -= learningRate * derivative;
+    drawGradient();
+    if (Math.abs(derivative) > 0.04 && gradientRunning) {
+        requestAnimationFrame(stepGradient);
+    } else {
+        gradientRunning = false;
+    }
+}
+
+$("#gradientBtn").addEventListener("click", () => {
+    gradientX = -4.8;
+    gradientRunning = true;
+    stepGradient();
+});
+
+drawGradient();
+
+const glossary = [
+    ["Algoritmo", "Sequência de passos para resolver um problema."],
+    ["IA", "Área da computação que cria sistemas capazes de realizar tarefas associadas à inteligência."],
+    ["Machine Learning", "Técnica em que modelos aprendem padrões a partir de dados."],
+    ["Rede neural", "Modelo inspirado em camadas de neurônios artificiais conectados por pesos."],
+    ["Vetor", "Lista ordenada de números usada para representar dados."],
+    ["Matriz", "Tabela de números usada em imagens, transformações e redes neurais."],
+    ["Peso", "Número ajustável que controla a força de uma conexão em um modelo."],
+    ["Viés", "Valor extra que ajuda um neurônio artificial a ajustar sua saída."],
+    ["Gradiente", "Direção que indica como uma função muda, útil para reduzir erro."],
+    ["Dataset", "Conjunto de dados usado para treinar, testar ou avaliar um sistema."],
+    ["Overfitting", "Quando um modelo decora os exemplos de treino e generaliza mal."],
+    ["Criptografia", "Técnicas matemáticas para proteger informações."]
+];
+
+function renderGlossary() {
+    const query = $("#glossarySearch").value.toLowerCase().trim();
+    const items = glossary.filter(([term, desc]) => `${term} ${desc}`.toLowerCase().includes(query));
+    $("#glossaryGrid").innerHTML = items.map(([term, desc]) => `
+        <div class="term">
+            <strong>${term}</strong>
+            <span>${desc}</span>
+        </div>
+    `).join("") || `<div class="term"><strong>Nenhum termo</strong><span>Tente outra palavra.</span></div>`;
+}
+
+$("#glossarySearch").addEventListener("input", renderGlossary);
+renderGlossary();
+
+const questions = [
+    {
+        q: "Qual área da matemática é essencial para representar imagens como números?",
+        options: ["Álgebra linear", "Geografia política", "Literatura clássica", "Botânica"],
+        answer: 0,
+        explain: "Imagens podem ser representadas por matrizes de pixels, ideia ligada à álgebra linear."
+    },
+    {
+        q: "O que é um algoritmo?",
+        options: ["Uma sequência de passos para resolver um problema", "Um tipo de cabo de rede", "Uma peça física do monitor", "Uma cor usada em gráficos"],
+        answer: 0,
+        explain: "Algoritmos são instruções organizadas para chegar a um resultado."
+    },
+    {
+        q: "Na base do computador, o sistema binário usa quais símbolos?",
+        options: ["0 e 1", "A e B", "2 e 3", "X e Y"],
+        answer: 0,
+        explain: "O binário representa estados como desligado/ligado usando 0 e 1."
+    },
+    {
+        q: "O que a descida do gradiente busca reduzir?",
+        options: ["Erro", "Memória da tela", "Tamanho do teclado", "Número de usuários"],
+        answer: 0,
+        explain: "Ela ajusta parâmetros para diminuir uma função de erro."
+    },
+    {
+        q: "Qual linguagem é muito usada em projetos de IA e ciência de dados?",
+        options: ["Python", "HTML puro", "CSS", "Markdown"],
+        answer: 0,
+        explain: "Python é popular por suas bibliotecas de dados, IA e automação."
+    },
+    {
+        q: "O que são dados de treino?",
+        options: ["Exemplos usados para o modelo aprender", "Cabos do computador", "Imagens decorativas", "Somente senhas"],
+        answer: 0,
+        explain: "Modelos aprendem padrões analisando exemplos."
+    },
+    {
+        q: "Qual técnica protege mensagens e transações digitais?",
+        options: ["Criptografia", "Pintura digital", "Compressão muscular", "Geometria de dobraduras"],
+        answer: 0,
+        explain: "Criptografia usa matemática para dificultar acesso indevido à informação."
+    },
+    {
+        q: "Em redes neurais, o que os pesos fazem?",
+        options: ["Controlam a força das conexões", "Aumentam o brilho da tela", "Medem a velocidade do mouse", "Escolhem a fonte do site"],
+        answer: 0,
+        explain: "Pesos são valores ajustáveis que influenciam a saída do modelo."
+    },
+    {
+        q: "A teoria dos grafos ajuda a representar:",
+        options: ["Nós e conexões", "Apenas sons", "Somente temperaturas", "Páginas impressas"],
+        answer: 0,
+        explain: "Grafos modelam relações, como rotas, amizades e recomendações."
+    },
+    {
+        q: "Por que a ética importa em IA?",
+        options: ["Porque modelos podem afetar pessoas e decisões reais", "Porque deixa o computador mais pesado", "Porque substitui a matemática", "Porque apaga todos os dados"],
+        answer: 0,
+        explain: "IA precisa ser usada com responsabilidade, transparência e revisão humana."
+    }
+];
+
+let quizIndex = 0;
+let score = 0;
+let answered = false;
+
+function renderQuiz() {
+    answered = false;
+    const item = questions[quizIndex];
+    $("#questionCount").textContent = `Pergunta ${quizIndex + 1} de ${questions.length}`;
+    $("#quizScore").textContent = `Pontuação: ${score}`;
+    $("#quizQuestion").innerHTML = `<i class="fa-solid fa-circle-question"></i> ${item.q}`;
+    $("#quizFeedback").textContent = "";
+    $("#quizOptions").innerHTML = item.options.map((option, index) => `
+        <button class="quiz-option" type="button" data-option="${index}">${option}</button>
+    `).join("");
+
+    $$(".quiz-option").forEach((button) => {
+        button.addEventListener("click", () => {
+            if (answered) return;
+            answered = true;
+            const selected = Number(button.dataset.option);
+            const correct = selected === item.answer;
+            if (correct) score += 1;
+            $$(".quiz-option").forEach((optionButton) => {
+                const optionIndex = Number(optionButton.dataset.option);
+                optionButton.classList.toggle("correct", optionIndex === item.answer);
+                optionButton.classList.toggle("wrong", optionIndex === selected && !correct);
+            });
+            $("#quizScore").textContent = `Pontuação: ${score}`;
+            $("#quizFeedback").textContent = `${correct ? "Correto." : "Quase."} ${item.explain}`;
+        });
+    });
+}
+
+$("#nextQuestion").addEventListener("click", () => {
+    if (quizIndex === questions.length - 1) {
+        quizIndex = 0;
+        score = 0;
+    } else {
+        quizIndex += 1;
+    }
+    renderQuiz();
+});
+
+renderQuiz();
+
+$$(".tab-btn").forEach((button) => {
+    button.addEventListener("click", () => {
+        const tab = button.dataset.tab;
+        $$(".tab-btn").forEach((btn) => btn.classList.toggle("active", btn === button));
+        $$(".tab-content").forEach((content) => content.classList.toggle("active", content.id === `tab-${tab}`));
+    });
+});
+
+const savedChecks = JSON.parse(localStorage.getItem("science-checklist") || "{}");
+$$("[data-check]").forEach((checkbox) => {
+    checkbox.checked = Boolean(savedChecks[checkbox.dataset.check]);
+    checkbox.addEventListener("change", () => {
+        savedChecks[checkbox.dataset.check] = checkbox.checked;
+        localStorage.setItem("science-checklist", JSON.stringify(savedChecks));
+    });
+});
+
+window.addEventListener("resize", () => {
+    drawNetwork();
+    drawGradient();
+});
+</script>
+</body>
+</html>
