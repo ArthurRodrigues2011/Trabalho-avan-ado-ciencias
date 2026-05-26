@@ -1,0 +1,19 @@
+{
+    "name": "Feira de Ciencias 2026 | Matematica, IA e Programacao",
+    "short_name": "Feira Tech",
+    "description": "Projeto de feira de ciencias sobre matematica, inteligencia artificial e programacao.",
+    "start_url": "./index.html",
+    "scope": "./",
+    "display": "standalone",
+    "background_color": "#040613",
+    "theme_color": "#00f7ff",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "./assets/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        }
+    ]
+}

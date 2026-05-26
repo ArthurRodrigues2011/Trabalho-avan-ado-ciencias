@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Analytics Admin</title>
+  <link rel="stylesheet" href="/admin.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">GitHub Pages Analytics</p>
+        <h1>Painel administrativo</h1>
+      </div>
+      <div class="topbar-actions">
+        <span class="live-pill"><span class="live-dot"></span>Tempo real</span>
+        <button class="ghost-button" id="refreshButton" type="button">Atualizar</button>
+      </div>
+    </header>
+
+    <section class="token-panel hidden" id="tokenPanel" aria-live="polite">
+      <div>
+        <h2>Acesso protegido</h2>
+        <p>Informe o token configurado em ADMIN_TOKEN para carregar os dados do painel.</p>
+      </div>
+      <form id="tokenForm" class="token-form">
+        <input id="tokenInput" type="password" autocomplete="current-password" placeholder="Token administrativo">
+        <button type="submit">Entrar</button>
+      </form>
+    </section>
+
+    <section class="status-line" id="statusLine">Carregando dados...</section>
+
+    <section class="metric-grid" aria-label="Indicadores principais">
+      <article class="metric-card accent-cyan">
+        <span>Total de visitas</span>
+        <strong id="totalVisits">0</strong>
+      </article>
+      <article class="metric-card accent-green">
+        <span>Visitantes únicos</span>
+        <strong id="uniqueVisitors">0</strong>
+      </article>
+      <article class="metric-card accent-amber">
+        <span>Online agora</span>
+        <strong id="onlineVisitors">0</strong>
+      </article>
+      <article class="metric-card accent-rose">
+        <span>Últimas 24h</span>
+        <strong id="visitsLast24h">0</strong>
+      </article>
+    </section>
+
+    <section class="dashboard-grid">
+      <article class="panel chart-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Acessos por dia</h2>
+            <p>Últimos 14 dias</p>
+          </div>
+          <span id="lastUpdated">--</span>
+        </div>
+        <canvas id="visitsChart" height="260"></canvas>
+      </article>
+
+      <article class="panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Visitantes online</h2>
+            <p id="onlineWindow">Janela ativa</p>
+          </div>
+        </div>
+        <div class="online-list" id="onlineList"></div>
+      </article>
+    </section>
+
+    <section class="dashboard-grid secondary">
+      <article class="panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Páginas mais acessadas</h2>
+            <p>Ranking por visualização</p>
+          </div>
+        </div>
+        <div class="rank-list" id="topPages"></div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Dispositivos</h2>
+            <p>Distribuição de acesso</p>
+          </div>
+        </div>
+        <div class="rank-list" id="devicesList"></div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Países</h2>
+            <p>Origem estimada por IP</p>
+          </div>
+        </div>
+        <div class="rank-list" id="countriesList"></div>
+      </article>
+    </section>
+
+    <section class="panel table-panel">
+      <div class="panel-heading">
+        <div>
+          <h2>Tabela de visitantes</h2>
+          <p>Registros recentes recebidos pela API</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Horário</th>
+              <th>IP</th>
+              <th>País</th>
+              <th>Navegador</th>
+              <th>Sistema</th>
+              <th>Dispositivo</th>
+              <th>Página</th>
+            </tr>
+          </thead>
+          <tbody id="visitsTable">
+            <tr>
+              <td colspan="7">Nenhuma visita registrada ainda.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="/admin.js" defer></script>
+</body>
+</html>

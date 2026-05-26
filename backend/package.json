@@ -1,0 +1,22 @@
+{
+  "name": "github-pages-analytics-backend",
+  "version": "1.0.0",
+  "description": "Sistema profissional de analytics para sites estaticos hospedados no GitHub Pages.",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "check": "node --check server.js && node --check routes/analytics.js && node --check src/storage/jsonVisitStore.js && node --check src/utils/clientInfo.js && node --check src/utils/logger.js"
+  },
+  "engines": {
+    "node": ">=18.18.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "geoip-lite": "^1.4.10",
+    "ua-parser-js": "^1.0.39"
+  }
+}
